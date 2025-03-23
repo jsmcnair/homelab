@@ -12,9 +12,14 @@ spec:
     repoURL: https://charts.external-secrets.io
     chart: external-secrets
     targetRevision: v0.15.0
+  helm:
+    parameters:
+      - name: bitwarden-sdk-server.enabled
+        value: "true"
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+    
