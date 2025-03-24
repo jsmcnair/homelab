@@ -8,14 +8,18 @@ spec:
   destination: 
     namespace: external-secrets
     server: https://kubernetes.default.svc
-  source:
-    repoURL: https://charts.external-secrets.io
-    chart: external-secrets
-    targetRevision: v0.15.0
-    helm:
-      parameters:
-        - name: bitwarden-sdk-server.enabled
-          value: "true"
+  sources:
+    - repoURL: https://charts.external-secrets.io
+      chart: external-secrets
+      targetRevision: v0.15.0
+      helm:
+        parameters:
+          - name: bitwarden-sdk-server.enabled
+            value: "true"
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/external-secrets
+      directory:
+        exclude: application.yaml
   syncPolicy:
     automated:
       prune: true
