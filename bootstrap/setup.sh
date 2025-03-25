@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 ARGOCD_SSH_KEYFILE="${ARGOCD_SSH_KEYFILE:?Must set ARGOCD_SSH_KEYFILE to path of and SSH private key}"
+TAILSCALE_OAUTH_CLIENT_ID="${TAILSCALE_OAUTH_CLIENT_ID:?Must set TAILSCALE_OAUTH_CLIENT_ID to OAuth client ID}"
+TAILSCALE_OAUTH_CLIENT_SECRET="${TAILSCALE_OAUTH_CLIENT_SECRET:?Must set TAILSCALE_OAUTH_CLIENT_SECRET to OAuth client secret}"
 REPOSITORY=$(git remote get-url origin)
 
 # Check helm is available
@@ -66,7 +68,6 @@ else
     echo "✅ ArgoCD repository secret already exists."
 fi
 
-
 kubectl config set-context --current --namespace argocd > /dev/null
 if ! argocd app get applications > /dev/null; then
     if argocd app create applications \
@@ -87,3 +88,13 @@ if ! argocd app get applications > /dev/null; then
 else
     echo "✅ ArgoCD bootstrap application already exists"
 fi
+
+kubectl create namespace external-secrets --dry-run=client -o yaml | kubectl apply -f - > /dev/null
+echo "✅ Ensure external-secrets namespace created"
+
+kubectl create secret generic bootstrap \
+    --namespace external-secrets \
+    --from-literal tailscale-oauth-client-id=$TAILSCALE_OAUTH_CLIENT_ID \
+    --from-literal tailscale-oauth-client-secret=$TAILSCALE_OAUTH_CLIENT_SECRET \
+    --dry-run=client -o yaml | kubectl apply -f - > /dev/null
+echo "✅ Ensure bootstrap secret created"
