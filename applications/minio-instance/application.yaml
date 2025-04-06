@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio-instance
+  namespace: argocd
+spec:
+  project: default
+  destination: 
+    namespace: minio
+    server: https://kubernetes.default.svc
+  sources:
+    - repoURL: https://operator.min.io
+      chart: tenant
+      targetRevision: v7.0.1
+      helm:
+        parameters:
+          - name: tenant.name
+            value: minio
+          - name: tenant.configuration.name
+            value: minio-root-secret
+          - name: tenant.configSecret.existingSecret
+            value: "true"
+          - name: tenant.configSecret.name
+            value: minio-root-secret
+          - name: tenant.configSecret.accessKey
+            value: null
+          - name: tenant.configSecret.secretKey
+            value: null
+          - name: tenant.configSecret.existingSecret
+            value: "true"
+          - name: tenant.pools[0].name
+            value: minio-pool
+          - name: tenant.pools[0].servers
+            value: "1"
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/minio-instance
+      directory:
+        exclude: application.yaml
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
