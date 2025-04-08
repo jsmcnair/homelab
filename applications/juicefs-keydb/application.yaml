@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: juicefs-keydb
+  namespace: argocd
+spec:
+  project: default
+  destination: 
+    namespace: juicefs
+    server: https://kubernetes.default.svc
+  sources:
+    - repoURL: registry-1.docker.io/bitnamicharts
+      chart: keydb
+      targetRevision: 0.5.4
+      helm:
+        parameters:
+          - name: replica.activeReplica
+            value: "true"
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/juicefs-keydb
+      directory:
+        exclude: application.yaml
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
