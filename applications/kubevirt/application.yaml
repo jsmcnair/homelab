@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  creationTimestamp: null
+  name: kubevirt
+  namespace: argocd
+spec:
+  destination:
+    namespace: kubevirt
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    directory:
+      include: manifests/*
+      jsonnet: {}
+      recurse: true
+    path: applications/kubevirt
+    repoURL: git@github.com:jsmcnair/homelab
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+status:
+  health: {}
+  sourceHydrator: {}
+  summary: {}
+  sync:
+    comparedTo:
+      destination: {}
+      source:
+        repoURL: ""
+    status: ""

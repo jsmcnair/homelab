@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: applications
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    namespace: default
+    name: in-cluster
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  sources:
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/cert-manager
+      directory:
+        jsonnet: {}
+        include: application.yaml
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/external-secrets
+      directory:
+        jsonnet: {}
+        include: application.yaml
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/minio-operator
+      directory:
+        jsonnet: {}
+        include: application.yaml
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/minio-instance
+      directory:
+        jsonnet: {}
+        include: application.yaml
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/tailscale-operator
+      directory:
+        jsonnet: {}
+        include: application.yaml
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/kubevirt
+      directory:
+        jsonnet: {}
+        include: application.yaml
