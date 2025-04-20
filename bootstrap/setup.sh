@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-ARGOCD_SSH_KEYFILE="${ARGOCD_SSH_KEYFILE:?Must set ARGOCD_SSH_KEYFILE to path of and SSH private key}"
-TAILSCALE_OAUTH_CLIENT_ID="${TAILSCALE_OAUTH_CLIENT_ID:?Must set TAILSCALE_OAUTH_CLIENT_ID to OAuth client ID}"
-TAILSCALE_OAUTH_CLIENT_SECRET="${TAILSCALE_OAUTH_CLIENT_SECRET:?Must set TAILSCALE_OAUTH_CLIENT_SECRET to OAuth client secret}"
+ARGOCD_SSH_PRIVATE_KEY_FILE="${ARGOCD_SSH_PRIVATE_KEY_FILE:?Must set ARGOCD_SSH_PRIVATE_KEY_FILE to path of and SSH private key}"
+BOOTSTRAP_SECRET_BASE64=${BOOTSTRAP_SECRET_BASE64:?Must set BOOTSTRAP_SECRET_BASE64 which is a base64 encoded Kubernetes secret manifest}
 REPOSITORY=$(git remote get-url origin)
 
 # Check helm is available
@@ -52,7 +51,8 @@ if ! kubectl get secret argocd-repo-credentials -n argocd &> /dev/null; then
     if ! kubectl create secret generic argocd-repo-credentials \
         --namespace argocd \
         --from-literal=url="$REPOSITORY" \
-        --from-literal=sshPrivateKey="$(cat $ARGOCD_SSH_KEYFILE)" &> /dev/null; then
+        --from-literal=type=git \
+        --from-file=sshPrivateKey="$ARGOCD_SSH_PRIVATE_KEY_FILE" &> /dev/null; then
         echo "❌ Failed to create ArgoCD repository secret."
         exit 1
     else
@@ -69,32 +69,10 @@ else
 fi
 
 kubectl config set-context --current --namespace argocd > /dev/null
-if ! argocd app get applications > /dev/null; then
-    if argocd app create applications \
-        --dest-name in-cluster \
-        --dest-namespace default \
-        --repo $REPOSITORY \
-        --path applications \
-        --directory-recurse \
-        --sync-policy auto \
-        --auto-prune \
-        --self-heal \
-        --directory-include "**application.yaml"; then
-        echo "✅ ArgoCD bootstrap application created"
-    else
-        echo "❌ Failed to create ArgoCD bootstrap application."
-        exit 1
-    fi
-else
-    echo "✅ ArgoCD bootstrap application already exists"
-fi
+kubectl apply -f bootstrap/application.yaml > /dev/null
+echo "✅ ensure ArgoCD application created"
 
 kubectl create namespace external-secrets --dry-run=client -o yaml | kubectl apply -f - > /dev/null
-echo "✅ Ensure external-secrets namespace created"
+echo "✅ ensure external-secrets namespace created"
 
-kubectl create secret generic bootstrap \
-    --namespace external-secrets \
-    --from-literal tailscale-oauth-client-id=$TAILSCALE_OAUTH_CLIENT_ID \
-    --from-literal tailscale-oauth-client-secret=$TAILSCALE_OAUTH_CLIENT_SECRET \
-    --dry-run=client -o yaml | kubectl apply -f - > /dev/null
-echo "✅ Ensure bootstrap secret created"
+echo "$BOOTSTRAP_SECRET_BASE64" | base64 -d | kubectl apply -f -
