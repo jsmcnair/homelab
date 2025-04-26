@@ -43,3 +43,8 @@ spec:
       directory:
         jsonnet: {}
         include: application.yaml
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/localpath-provisioner
+      directory:
+        jsonnet: {}
+        include: application.yaml

@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: openebs
+  namespace: argocd
+spec:
+  project: default
+  destination: 
+    namespace: openebs
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://openebs.github.io/openebs
+    chart: openebs
+    targetRevision: v2.10.0
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
