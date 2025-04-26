@@ -11,10 +11,23 @@ spec:
   source:
     repoURL: https://openebs.github.io/openebs
     chart: openebs
-    targetRevision: v2.10.0
+    targetRevision: v4.2.0
+    helm:
+      parameters:
+        - name: engines.local.lvm.enabled
+          value: "false"
+        - name: engines.local.zfs.enabled
+          value: "false"
+        - name: mayastor.csi.node.initContainers.enabled
+          value: "false"
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/audit: privileged
+        pod-security.kubernetes.io/enforce: privileged
+        pod-security.kubernetes.io/warn: privileged
