@@ -20,6 +20,8 @@ spec:
           value: "false"
         - name: mayastor.csi.node.initContainers.enabled
           value: "false"
+        - name: mayastor.io_engine.envcontext
+          value: iova-mode=pa
   syncPolicy:
     automated:
       prune: true
