@@ -1,0 +1,40 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: bitwarden-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: bitwarden-certificate
+spec:
+  secretName: bitwarden-tls-certs
+  issuerRef:
+    name: bitwarden-issuer
+    kind: Issuer
+  dnsNames:
+    - bitwarden-sdk-server.external-secrets.svc.cluster.local
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: bitwarden
+spec:
+  provider:
+    bitwardensecretsmanager:
+      bitwardenServerSDKURL: https://bitwarden-sdk-server.external-secrets.svc.cluster.local:9998
+      auth:
+        secretRef:
+          credentials:
+            key: bitwarden-access-token
+            name: bootstrap
+            namespace: external-secrets
+      caProvider:
+        type: Secret
+        name: bitwarden-tls-certs
+        key: ca.crt
+        namespace: external-secrets
+      projectID: 9d864a78-3d6c-40c9-9cca-b2aa01439cbf
+      organizationID: ae7d1a55-9b64-474a-8fc6-b2a901465fa7

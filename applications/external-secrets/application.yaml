@@ -11,11 +11,16 @@ spec:
   sources:
     - repoURL: https://charts.external-secrets.io
       chart: external-secrets
-      targetRevision: v0.15.0
+      targetRevision: v0.16.1
+      helm:
+        parameters:
+          - name: bitwarden-sdk-server.enabled
+            value: "true"
     - repoURL: git@github.com:jsmcnair/homelab
       path: applications/external-secrets
       directory:
         exclude: application.yaml
+    
   syncPolicy:
     automated:
       prune: true
