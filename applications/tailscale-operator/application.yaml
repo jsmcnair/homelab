@@ -12,6 +12,10 @@ spec:
     - repoURL: https://pkgs.tailscale.com/helmcharts
       chart: tailscale-operator
       targetRevision: v1.80.3
+      helm:
+        parameters:
+          - name: operatorConfig.hostname
+            value: infra-k8s
     - repoURL: git@github.com:jsmcnair/homelab
       path: applications/tailscale-operator
       directory:
