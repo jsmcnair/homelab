@@ -13,6 +13,9 @@ spec:
       chart: tailscale-operator
       targetRevision: v1.80.3
       helm:
+        values: |
+          apiServerProxyConfig:
+            mode: "true"
         parameters:
           - name: operatorConfig.hostname
             value: infra-k8s
