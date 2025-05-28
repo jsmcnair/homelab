@@ -1,0 +1,5 @@
+server:
+  service:
+    labels:
+      tailscale.com/expose: true
+      tailscale.com/hostname: argocd-infra
