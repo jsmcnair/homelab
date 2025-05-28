@@ -1,28 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: tailscale-operator
+  name: k8s-monitoring
   namespace: argocd
 spec:
   project: default
   destination: 
-    namespace: tailscale-operator
+    namespace: k8s-monitoring
     server: https://kubernetes.default.svc
   sources:
-    - repoURL: https://pkgs.tailscale.com/helmcharts
-      chart: tailscale-operator
-      targetRevision: v1.80.3
+    - repoURL: https://grafana.github.io/helm-charts
+      chart: k8s-monitoring
+      targetRevision: v2.1.4
       helm:
-        values: |
-          apiServerProxyConfig:
-            mode: "true"
-        parameters:
-          - name: operatorConfig.hostname
-            value: infra-k8s
+        valueFiles:
+          - $values/applications/k8s-monitoring/values.yaml
     - repoURL: git@github.com:jsmcnair/homelab
-      path: applications/tailscale-operator
+      path: applications/k8s-monitoring
       directory:
-        exclude: application.yaml
+        jsonnet: {}
+        exclude: application.yaml,values.yaml
+    - repoURL: git@github.com:jsmcnair/homelab
+      ref: values
   syncPolicy:
     automated:
       prune: true
