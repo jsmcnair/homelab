@@ -6,37 +6,37 @@ resources:
       limits:
         memory: "1Gi"
       requests:
-        cpu: "100m"
-        memory: "512Mi"
+        cpu: "10m"
+        memory: "64Mi"
     mon:
       limits:
         memory: "1Gi"
       requests:
-        cpu: "100m"
-        memory: "256Mi"
+        cpu: "10m"
+        memory: "64Mi"
     osd:
       limits:
         memory: "2Gi"
       requests:
         cpu: "50m"
-        memory: "256Mi"
+        memory: "64Mi"
     mgr-sidecar:
       limits:
         memory: "100Mi"
       requests:
-        cpu: "50m"
+        cpu: "10m"
         memory: "40Mi"
     crashcollector:
       limits:
         memory: "60Mi"
       requests:
         cpu: "10m"
-        memory: "60Mi"
+        memory: "30Mi"
     logcollector:
       limits:
         memory: "1Gi"
       requests:
-        cpu: "50m"
+        cpu: "10m"
         memory: "50Mi"
     cleanup:
       limits:
@@ -48,7 +48,7 @@ resources:
       limits:
         memory: "128Mi"
       requests:
-        cpu: "50m"
+        cpu: "10m"
         memory: "50Mi"
 cephBlockPools:
   - name: ceph-blockpool
