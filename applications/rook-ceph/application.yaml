@@ -1,25 +1,23 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: k8s-monitoring
+  name: rook
   namespace: argocd
 spec:
   project: default
   destination: 
-    namespace: k8s-monitoring
+    namespace: rook-ceph
     server: https://kubernetes.default.svc
   sources:
-    - repoURL: https://grafana.github.io/helm-charts
-      chart: k8s-monitoring
-      targetRevision: v2.1.4
+    - repoURL: https://charts.rook.io/release
+      chart: rook-ceph
+      targetRevision: v1.17.2
+    - repoURL: https://charts.rook.io/release
+      chart: rook-ceph-cluster
+      targetRevision: v1.17.2
       helm:
         valueFiles:
-          - $values/applications/k8s-monitoring/values.yaml
-    - repoURL: git@github.com:jsmcnair/homelab
-      path: applications/k8s-monitoring
-      directory:
-        jsonnet: {}
-        exclude: application.yaml,values.yaml
+          - $values/applications/rook-ceph/ceph-cluster-values.yaml
     - repoURL: git@github.com:jsmcnair/homelab
       ref: values
   syncPolicy:
@@ -33,3 +31,4 @@ spec:
         pod-security.kubernetes.io/audit: privileged
         pod-security.kubernetes.io/enforce: privileged
         pod-security.kubernetes.io/warn: privileged
+  
