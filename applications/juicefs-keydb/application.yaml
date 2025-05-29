@@ -16,6 +16,9 @@ spec:
         parameters:
           - name: replica.activeReplica
             value: "true"
+    - repoURL: https://juicedata.github.io/charts
+      chart: juicefs-csi-driver
+      targetRevision: v0.28.1
     - repoURL: git@github.com:jsmcnair/homelab
       path: applications/juicefs-keydb
       directory:
