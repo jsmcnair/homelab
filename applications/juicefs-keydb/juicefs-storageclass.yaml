@@ -1,0 +1,11 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: storj
+provisioner: csi.juicefs.com
+parameters:
+  csi.storage.k8s.io/provisioner-secret-name: storj
+  csi.storage.k8s.io/provisioner-secret-namespace: juicefs
+  csi.storage.k8s.io/node-publish-secret-name: storj
+  csi.storage.k8s.io/node-publish-secret-namespace: juicefs
+reclaimPolicy: Retain
