@@ -39,12 +39,12 @@ spec:
         jsonnet: {}
         include: application.yaml
     - repoURL: git@github.com:jsmcnair/homelab
-      path: applications/rook-ceph
+      path: applications/juicefs-keydb
       directory:
         jsonnet: {}
         include: application.yaml
     - repoURL: git@github.com:jsmcnair/homelab
-      path: applications/juicefs-keydb
+      path: applications/longhorn
       directory:
         jsonnet: {}
         include: application.yaml
