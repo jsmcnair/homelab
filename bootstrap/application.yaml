@@ -48,3 +48,8 @@ spec:
       directory:
         jsonnet: {}
         include: application.yaml
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/ingress-nginx
+      directory:
+        jsonnet: {}
+        include: application.yaml
