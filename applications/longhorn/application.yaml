@@ -16,6 +16,11 @@ spec:
         valuesObject:
           preUpgradeChecker:
             jobEnabled: false
+          ingress:
+            enabled: true
+            host: infra
+          defaultSettings:
+            defaultDataPath: /var/mnt/longhorn-nvme
     - repoURL: git@github.com:jsmcnair/homelab
       path: applications/longhorn
       directory:
