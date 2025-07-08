@@ -19,7 +19,7 @@ spec:
       path: applications/k8s-monitoring
       directory:
         jsonnet: {}
-        exclude: application.yaml,values.yaml
+        exclude: "{application.yaml,values.yaml}"
     - repoURL: git@github.com:jsmcnair/homelab
       ref: values
   syncPolicy:

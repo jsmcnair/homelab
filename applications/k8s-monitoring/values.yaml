@@ -45,6 +45,9 @@ clusterMetrics:
   enabled: true
   kepler:
     enabled: false
+  node-exporter:
+    metricsTuning:
+      useIntegrationAllowList: true
 prometheusOperatorObjects:
   enabled: true
 clusterEvents:
