@@ -21,6 +21,9 @@ spec:
     - repoURL: https://juicedata.github.io/charts
       chart: juicefs-csi-driver
       targetRevision: v0.28.1
+      helm:
+        valuesObject:
+          immutable: "true"
     - repoURL: git@github.com:jsmcnair/homelab
       path: applications/juicefs-keydb
       directory:
