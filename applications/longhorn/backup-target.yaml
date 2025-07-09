@@ -1,0 +1,7 @@
+apiVersion: longhorn.io/v1beta2
+kind: BackupTarget
+metadata:
+  name: storj
+spec:
+  backupTargetURL: s3://infra-k8s/
+  credentialSecret: storj-longhorn-backups
