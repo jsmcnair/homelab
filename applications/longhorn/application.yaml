@@ -16,6 +16,8 @@ spec:
         valuesObject:
           preUpgradeChecker:
             jobEnabled: false
+          longhornUI:
+            replicas: 1
           ingress:
             enabled: true
             host: infra
