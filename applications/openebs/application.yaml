@@ -8,20 +8,29 @@ spec:
   destination: 
     namespace: openebs
     server: https://kubernetes.default.svc
-  source:
-    repoURL: https://openebs.github.io/openebs
-    chart: openebs
-    targetRevision: v4.2.0
-    helm:
-      parameters:
-        - name: engines.local.lvm.enabled
-          value: "false"
-        - name: engines.local.zfs.enabled
-          value: "false"
-        - name: mayastor.csi.node.initContainers.enabled
-          value: "false"
-        - name: mayastor.io_engine.envcontext
-          value: iova-mode=pa
+  sources:
+    - repoURL: https://openebs.github.io/openebs
+      chart: openebs
+      targetRevision: v4.2.0
+      helm:
+        values: |
+          engines:
+            local:
+              lvm:
+                enabled: "false"
+              zfs:
+                enabled: "false"
+          mayastor:
+            csi:
+              node:
+                initContainers:
+                  enabled: false
+            io_engine:
+              envcontext: iova-mode=pa
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/openebs
+      directory:
+        exclude: application.yaml
   syncPolicy:
     automated:
       prune: true

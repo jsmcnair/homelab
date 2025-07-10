@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: velero
+  namespace: argocd
+spec:
+  project: default
+  destination: 
+    namespace: velero
+    server: https://kubernetes.default.svc
+  sources:
+    - repoURL: https://vmware-tanzu.github.io/helm-charts
+      chart: velero
+      targetRevision: v10.0.8
+      helm:
+        valuesObject:
+          initContainers:
+            - name: velero-plugin-for-aws
+              image: velero/velero-plugin-for-aws:v1.12.1
+              imagePullPolicy:
+              volumeMounts:
+                - mountPath: /target
+                  name: plugins
+          credentials:
+            existingSecret: velero-storj
+          configuration:
+            backupStorageLocation:
+              - name: storj
+                provider: velero.io/aws
+                bucket: infra-k8s
+                prefix: backups
+                config:
+                  s3Url: https://gateway.storjshare.io
+                  s3ForcePathStyle: "true"
+          defaultBackupStorageLocation: storj
+          snapshotsEnabled: false
+          deployNodeAgent: true
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/velero
+      directory:
+        exclude: application.yaml
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/audit: privileged
+        pod-security.kubernetes.io/enforce: privileged
+        pod-security.kubernetes.io/warn: privileged

@@ -58,4 +58,9 @@ spec:
       directory:
         jsonnet: {}
         include: application.yaml
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/velero
+      directory:
+        jsonnet: {}
+        include: application.yaml
     
