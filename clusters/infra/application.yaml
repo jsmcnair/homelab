@@ -63,4 +63,9 @@ spec:
       directory:
         jsonnet: {}
         include: application.yaml
+    - repoURL: git@github.com:jsmcnair/homelab
+      path: applications/external-dns
+      directory:
+        jsonnet: {}
+        include: application.yaml
     
