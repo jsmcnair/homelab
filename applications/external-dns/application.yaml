@@ -22,11 +22,6 @@ spec:
                 secretKeyRef:
                   name: cloudflare
                   key: CF_API_TOKEN
-            - name: CF_API_EMAIL
-              valueFrom:
-                secretKeyRef:
-                  name: cloudflare
-                  key: CF_API_EMAIL
     - repoURL: git@github.com:jsmcnair/homelab
       path: applications/external-dns
       directory:
