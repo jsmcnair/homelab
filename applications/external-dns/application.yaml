@@ -14,6 +14,8 @@ spec:
       targetRevision: v1.17.0
       helm:
         valuesObject:
+          txtOwnerId: infra
+          triggerLoopOnEvent: true
           provider:
             name: cloudflare
           env:
