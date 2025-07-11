@@ -20,8 +20,9 @@ spec:
             replicas: 1
           ingress:
             enabled: true
-            host: infra
-            path: /longhorn
+            host: longhorn.infra.turong.dev
+            annotations:
+              external-dns.alpha.kubernetes.io/target: infra
           defaultSettings:
             defaultDataPath: /var/mnt/longhorn-nvme
     - repoURL: git@github.com:jsmcnair/homelab
