@@ -22,7 +22,7 @@ spec:
             enabled: true
             host: longhorn.infra.turong.dev
             annotations:
-              external-dns.alpha.kubernetes.io/target: infra
+              external-dns.alpha.kubernetes.io/target: infra.tailf36795.ts.net
           defaultSettings:
             defaultDataPath: /var/mnt/longhorn-nvme
     - repoURL: git@github.com:jsmcnair/homelab
