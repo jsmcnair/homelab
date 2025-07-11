@@ -1,5 +1,11 @@
+configs:
+  params:
+    server.insecure: true
 server:
-  service:
-    labels:
-      tailscale.com/expose: "true"
-      tailscale.com/hostname: argocd-infra
+  ingress:
+    enabled: true
+    tls: true
+    hostname: argocd.infra.turong.dev
+    annotations:
+      external-dns.alpha.kubernetes.io/target: infra.tailf36795.ts.net
+      cert-manager.io/cluster-issuer: letsencrypt
