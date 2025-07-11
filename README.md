@@ -1,5 +1,5 @@
 # homelab
-Infrastructure code and documentation for my home lab
+Infrastructure code for my home lab
 
 For background documentation about the homelab project, decisions and design choices you can [read my blog article](https://blog.turong.dev/blog/planning-a-homelab/).
 
