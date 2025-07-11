@@ -21,8 +21,10 @@ spec:
           ingress:
             enabled: true
             host: longhorn.infra.turong.dev
+            tls: true
             annotations:
               external-dns.alpha.kubernetes.io/target: infra.tailf36795.ts.net
+              cert-manager.io/cluster-issuer: letsencrypt
           defaultSettings:
             defaultDataPath: /var/mnt/longhorn-nvme
     - repoURL: git@github.com:jsmcnair/homelab
