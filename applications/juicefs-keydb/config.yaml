@@ -1,0 +1,22 @@
+generators:
+  - name: juicefs-keydb
+    namespace: juicefs
+    type: argocd
+    sources:
+      - repoURL: registry-1.docker.io/bitnamicharts
+        chart: keydb
+        targetRevision: 0.5.4
+        helm:
+          parameters:
+            - name: replica.activeReplica
+              value: "true"
+            - name: auth.enabled
+              value: "false"
+      - repoURL: https://juicedata.github.io/charts
+        chart: juicefs-csi-driver
+        targetRevision: v0.28.1
+        helm:
+          valuesObject:
+            immutable: "true"
+    enableExtraManifestSource: true
+    privilegedNamespace: true

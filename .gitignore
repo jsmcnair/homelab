@@ -1,0 +1,11 @@
+# Build artifacts
+cmd/gen/gen
+
+# Vendor
+vendor/
+
+# Secret stuff
+talosconfig
+bootstrap-secret.yaml
+controlplane.yaml
+worker.yaml

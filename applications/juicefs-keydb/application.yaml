@@ -1,41 +1,53 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  creationTimestamp: null
   name: juicefs-keydb
   namespace: argocd
 spec:
+  destination:
+    name: in-cluster
+    namespace: default
   project: default
-  destination: 
-    namespace: juicefs
-    server: https://kubernetes.default.svc
   sources:
-    - repoURL: registry-1.docker.io/bitnamicharts
-      chart: keydb
-      targetRevision: 0.5.4
-      helm:
-        parameters:
-          - name: replica.activeReplica
-            value: "true"
-          - name: auth.enabled
-            value: "false"
-    - repoURL: https://juicedata.github.io/charts
-      chart: juicefs-csi-driver
-      targetRevision: v0.28.1
-      helm:
-        valuesObject:
-          immutable: "true"
-    - repoURL: git@github.com:jsmcnair/homelab
-      path: applications/juicefs-keydb
-      directory:
-        exclude: application.yaml
+  - chart: keydb
+    helm:
+      parameters:
+      - name: replica.activeReplica
+        value: "true"
+      - name: auth.enabled
+        value: "false"
+    repoURL: registry-1.docker.io/bitnamicharts
+    targetRevision: 0.5.4
+  - chart: juicefs-csi-driver
+    helm:
+      valuesObject:
+        immutable: "true"
+    repoURL: https://juicedata.github.io/charts
+    targetRevision: v0.28.1
+  - directory:
+      jsonnet: {}
+      recurse: true
+    path: applications/juicefs-keydb/extra
+    repoURL: github.com:jsmcnair/homelab
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
     managedNamespaceMetadata:
       labels:
         pod-security.kubernetes.io/audit: privileged
         pod-security.kubernetes.io/enforce: privileged
         pod-security.kubernetes.io/warn: privileged
+    syncOptions:
+    - CreateNamespace=true
+status:
+  health: {}
+  sourceHydrator: {}
+  summary: {}
+  sync:
+    comparedTo:
+      destination: {}
+      source:
+        repoURL: ""
+    status: ""
