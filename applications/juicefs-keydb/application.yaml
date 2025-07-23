@@ -29,7 +29,7 @@ spec:
       jsonnet: {}
       recurse: true
     path: applications/juicefs-keydb/extra
-    repoURL: github.com:jsmcnair/homelab
+    repoURL: git@github.com:jsmcnair/homelab
   syncPolicy:
     automated:
       prune: true

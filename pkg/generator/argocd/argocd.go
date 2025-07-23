@@ -16,7 +16,7 @@ import (
 const (
 	ARGOCD_DEFAULT_CLUSTER = "in-cluster"
 	ARGOCD_NAMESPACE       = "argocd"
-	ARGOCD_DEFAULT_REPO    = "github.com:jsmcnair/homelab"
+	ARGOCD_DEFAULT_REPO    = "git@github.com:jsmcnair/homelab"
 )
 
 type ArgoCDGenerator struct {
