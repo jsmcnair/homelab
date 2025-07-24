@@ -1,34 +1,42 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  creationTimestamp: null
   name: ingress-nginx
   namespace: argocd
 spec:
-  project: default
-  destination: 
+  destination:
+    name: in-cluster
     namespace: ingress-nginx
-    server: https://kubernetes.default.svc
+  project: default
   sources:
-    - repoURL: https://kubernetes.github.io/ingress-nginx
-      chart: ingress-nginx
-      targetRevision: v4.12.2
-      helm:
-        valuesObject:
-          controller:
-            watchIngressWithoutClass: true
-            service:
-              enabled: true
-              type: ClusterIP
-              annotations:
-                tailscale.com/expose: "true"
-                tailscale.com/hostname: infra
-    - repoURL: git@github.com:jsmcnair/homelab
-      path: applications/ingress-nginx
-      directory:
-        exclude: application.yaml
+  - chart: ingress-nginx
+    helm:
+      valuesObject:
+        controller:
+          service:
+            annotations:
+              tailscale.com/expose: "true"
+              tailscale.com/hostname: infra
+            enabled: true
+            type: ClusterIP
+          watchIngressWithoutClass: true
+    repoURL: https://kubernetes.github.io/ingress-nginx
+    targetRevision: v4.12.2
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    managedNamespaceMetadata: {}
     syncOptions:
-      - CreateNamespace=true
+    - CreateNamespace=true
+status:
+  health: {}
+  sourceHydrator: {}
+  summary: {}
+  sync:
+    comparedTo:
+      destination: {}
+      source:
+        repoURL: ""
+    status: ""

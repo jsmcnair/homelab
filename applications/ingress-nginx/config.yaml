@@ -1,0 +1,18 @@
+generators:
+  - name: ingress-nginx
+    type: argocd
+    namespace: ingress-nginx
+    sources:
+      - repoURL: https://kubernetes.github.io/ingress-nginx
+        chart: ingress-nginx
+        targetRevision: v4.12.2
+        helm:
+          valuesObject:
+            controller:
+              watchIngressWithoutClass: true
+              service:
+                enabled: true
+                type: ClusterIP
+                annotations:
+                  tailscale.com/expose: "true"
+                  tailscale.com/hostname: infra
