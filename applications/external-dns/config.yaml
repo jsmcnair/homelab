@@ -1,0 +1,21 @@
+generators:
+  - name: external-dns
+    type: argocd
+    namespace: external-dns
+    enableExtraManifestSource: true
+    sources:
+      - repoURL: https://kubernetes-sigs.github.io/external-dns
+        chart: external-dns
+        targetRevision: v1.17.0
+        helm:
+          valuesObject:
+            txtOwnerId: infra
+            triggerLoopOnEvent: true
+            provider:
+              name: cloudflare
+            env:
+              - name: CF_API_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: cloudflare
+                    key: CF_API_TOKEN
