@@ -1,49 +1,56 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  creationTimestamp: null
   name: longhorn
   namespace: argocd
 spec:
-  project: default
-  destination: 
+  destination:
+    name: in-cluster
     namespace: longhorn
-    server: https://kubernetes.default.svc
+  ignoreDifferences:
+  - group: apiextensions.k8s.io
+    jsonPointers:
+    - /spec/preserveUnknownFields
+    kind: CustomResourceDefinition
+  project: default
   sources:
-    - repoURL: https://charts.longhorn.io
-      chart: longhorn
-      targetRevision: v1.9.0
-      helm:
-        valuesObject:
-          preUpgradeChecker:
-            jobEnabled: false
-          longhornUI:
-            replicas: 1
-          ingress:
-            enabled: true
-            host: longhorn.infra.turong.dev
-            tls: true
-            annotations:
-              external-dns.alpha.kubernetes.io/target: infra.tailf36795.ts.net
-              cert-manager.io/cluster-issuer: letsencrypt
-          defaultSettings:
-            defaultDataPath: /var/mnt/longhorn-nvme
-    - repoURL: git@github.com:jsmcnair/homelab
-      path: applications/longhorn
-      directory:
-        exclude: application.yaml
+  - chart: longhorn
+    helm:
+      valuesObject:
+        defaultSettings:
+          defaultDataPath: /var/mnt/longhorn-nvme
+        ingress:
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt
+            external-dns.alpha.kubernetes.io/target: infra.tailf36795.ts.net
+          enabled: true
+          host: longhorn.infra.turong.dev
+          tls: true
+        longhornUI:
+          replicas: 1
+        preUpgradeChecker:
+          jobEnabled: false
+    repoURL: https://charts.longhorn.io
+    targetRevision: v1.9.0
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
     managedNamespaceMetadata:
       labels:
         pod-security.kubernetes.io/audit: privileged
         pod-security.kubernetes.io/enforce: privileged
         pod-security.kubernetes.io/warn: privileged
-  ignoreDifferences:
-  - group: apiextensions.k8s.io
-    kind: CustomResourceDefinition
-    jsonPointers:
-    - /spec/preserveUnknownFields
+    syncOptions:
+    - CreateNamespace=true
+status:
+  health: {}
+  sourceHydrator: {}
+  summary: {}
+  sync:
+    comparedTo:
+      destination: {}
+      source:
+        repoURL: ""
+    status: ""

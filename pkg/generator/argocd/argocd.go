@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"os"
 	"path"
-	
-	"sigs.k8s.io/yaml"
+
 	argocdv1alpha1 "github.com/argoproj/argo-cd/v3/pkg/apis/application/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"sigs.k8s.io/yaml"
 )
 
 const (
@@ -20,12 +20,13 @@ const (
 )
 
 type ArgoCDGenerator struct {
-	BaseDirectory            string `yaml:"-"` 
-	Name                     string `yaml:"name"`
-	Namespace                string `yaml:"namespace"`
-	EnableExtraManifestSource bool   `yaml:"enableExtraManifestSource"`
-	PrivilegedNamespace      bool   `yaml:"privilegedNamespace"`
-	Sources                  []argocdv1alpha1.ApplicationSource `yaml:"sources"`
+	BaseDirectory             string                             `yaml:"-"`
+	Name                      string                             `yaml:"name"`
+	Namespace                 string                             `yaml:"namespace"`
+	EnableExtraManifestSource bool                               `yaml:"enableExtraManifestSource"`
+	PrivilegedNamespace       bool                               `yaml:"privilegedNamespace"`
+	Sources                   []argocdv1alpha1.ApplicationSource `yaml:"sources"`
+	IgnoreDifferences         argocdv1alpha1.IgnoreDifferences   `yaml:"ignoreDifferences"`
 }
 
 func (ag ArgoCDGenerator) Generate() error {
@@ -51,26 +52,30 @@ func (ag ArgoCDGenerator) ConfigureApplication() argocdv1alpha1.Application {
 	if ag.Namespace != "" {
 		appSpec.Destination.Namespace = ag.Namespace
 	}
-	
+
 	for _, source := range ag.Sources {
 		appSpec.Sources = append(appSpec.Sources, source)
 	}
-	
+
 	if ag.EnableExtraManifestSource {
 		appSpec.Sources = append(appSpec.Sources, ag.GetExtraManifestSource())
 	}
-	
+
+	if len(ag.IgnoreDifferences) > 0 {
+		appSpec.IgnoreDifferences = ag.IgnoreDifferences
+	}
+
 	if ag.PrivilegedNamespace {
-		
+
 		if appSpec.SyncPolicy.ManagedNamespaceMetadata.Labels == nil {
 			appSpec.SyncPolicy.ManagedNamespaceMetadata.Labels = make(map[string]string)
 		}
-		
+
 		appSpec.SyncPolicy.ManagedNamespaceMetadata.Labels["pod-security.kubernetes.io/audit"] = "privileged"
 		appSpec.SyncPolicy.ManagedNamespaceMetadata.Labels["pod-security.kubernetes.io/enforce"] = "privileged"
 		appSpec.SyncPolicy.ManagedNamespaceMetadata.Labels["pod-security.kubernetes.io/warn"] = "privileged"
 	}
-	
+
 	return argocdv1alpha1.Application{
 		TypeMeta: metav1.TypeMeta{
 			APIVersion: "argoproj.io/v1alpha1",
@@ -82,13 +87,13 @@ func (ag ArgoCDGenerator) ConfigureApplication() argocdv1alpha1.Application {
 		},
 		Spec: *appSpec,
 	}
-	
+
 }
 
 func (ag ArgoCDGenerator) GetDefaultArgoCDApplicationSpec() *argocdv1alpha1.ApplicationSpec {
 	return &argocdv1alpha1.ApplicationSpec{
 		Destination: argocdv1alpha1.ApplicationDestination{
-			Name: "in-cluster",
+			Name:      "in-cluster",
 			Namespace: "default",
 		},
 		Project: "default",
