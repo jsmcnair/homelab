@@ -48,6 +48,10 @@ func (ag ArgoCDGenerator) Generate() error {
 func (ag ArgoCDGenerator) ConfigureApplication() argocdv1alpha1.Application {
 	appSpec := ag.GetDefaultArgoCDApplicationSpec()
 
+	if ag.Namespace != "" {
+		appSpec.Destination.Namespace = ag.Namespace
+	}
+	
 	for _, source := range ag.Sources {
 		appSpec.Sources = append(appSpec.Sources, source)
 	}
