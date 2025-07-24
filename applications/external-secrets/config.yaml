@@ -1,0 +1,14 @@
+generators:
+  - name: external-secrets
+    type: argocd
+    namespace: external-secrets
+    project: default
+    enableExtraManifestSource: true
+    sources:
+      - repoURL: https://charts.external-secrets.io
+        chart: external-secrets
+        targetRevision: v0.16.1
+        helm:
+          parameters:
+            - name: bitwarden-sdk-server.enabled
+              value: "true"
