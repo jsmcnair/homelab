@@ -1,0 +1,33 @@
+# Cluster API Operator configuration
+# This file contains minimal configuration for the cluster-api-operator
+
+# Manager configuration
+manager:
+  # Customize resource limits if needed
+  resources:
+    limits:
+      cpu: 500m
+      memory: 128Mi
+    requests:
+      cpu: 10m
+      memory: 64Mi
+
+# Default configurations for core providers
+# These will be installed automatically with the operator
+coreProvider:
+  name: cluster-api
+  version: v1.8.1
+
+bootstrapProviders:
+  - name: kubeadm
+    version: v1.8.1
+
+controlPlaneProviders:
+  - name: kubeadm
+    version: v1.8.1
+
+infrastructureProviders:
+  # Add infrastructure providers as needed
+  # Example for AWS:
+  # - name: aws
+  #   version: v2.6.1
