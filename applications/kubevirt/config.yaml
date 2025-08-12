@@ -1,0 +1,16 @@
+generators:
+  - type: clean
+  - type: url
+    destination: extra
+    tokens:
+      version: v1.5.0
+    url: https://github.com/kubevirt/kubevirt/releases/download/{{ .version }}/kubevirt-operator.yaml
+  - type: url
+    destination: extra
+    tokens:
+      version: v1.5.0
+    url: https://github.com/kubevirt/kubevirt/releases/download/{{ .version }}/kubevirt-cr.yaml
+  - type: argocd
+    name: kubevirt
+    namespace: kubevirt
+    enableExtraManifestSource: true

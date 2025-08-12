@@ -23,7 +23,7 @@ func TestGenerators() {
 	if rem, err := url.Parse("https://foo.bar/manifests"); err != nil {
 		panic("Could not parse URL")
 	} else {
-		urlgen.URL = *rem
+		urlgen.URL = rem.String()
 	}
 
 	gc := GeneratorConfig{}

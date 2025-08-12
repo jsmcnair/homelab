@@ -6,20 +6,20 @@ metadata:
   namespace: argocd
 spec:
   destination:
+    name: in-cluster
     namespace: kubevirt
-    server: https://kubernetes.default.svc
   project: default
-  source:
-    directory:
-      include: manifests/*
+  sources:
+  - directory:
       jsonnet: {}
       recurse: true
-    path: applications/kubevirt
+    path: applications/kubevirt/extra
     repoURL: git@github.com:jsmcnair/homelab
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    managedNamespaceMetadata: {}
     syncOptions:
     - CreateNamespace=true
 status:

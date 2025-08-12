@@ -30,6 +30,11 @@ type ArgoCDGenerator struct {
 }
 
 func (ag ArgoCDGenerator) Generate() error {
+	
+	if ag.Name == "" {
+		return fmt.Errorf("name is required")
+	}
+	
 	app := ag.ConfigureApplication()
 	outFile := path.Join(ag.BaseDirectory, "application.yaml")
 
@@ -48,7 +53,7 @@ func (ag ArgoCDGenerator) Generate() error {
 
 func (ag ArgoCDGenerator) ConfigureApplication() argocdv1alpha1.Application {
 	appSpec := ag.GetDefaultArgoCDApplicationSpec()
-
+	
 	if ag.Namespace != "" {
 		appSpec.Destination.Namespace = ag.Namespace
 	}
