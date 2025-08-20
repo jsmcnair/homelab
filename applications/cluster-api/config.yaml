@@ -1,0 +1,7 @@
+generators:
+  - type: argocd
+    name: cluster-api
+    namespace: capi-system
+    privilegedNamespace: true
+    
+      

@@ -73,4 +73,3 @@ spec:
       directory:
         jsonnet: {}
         include: application.yaml
-    
