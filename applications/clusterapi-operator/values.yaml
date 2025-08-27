@@ -1,6 +1,3 @@
-# Cluster API Operator configuration
-# This file contains minimal configuration for the cluster-api-operator
-
 # Manager configuration
 manager:
   # Customize resource limits if needed
@@ -11,23 +8,28 @@ manager:
     requests:
       cpu: 10m
       memory: 64Mi
+  featureGates:
+    core:
+      # Adding this only because the chart doesn't render otherwise
+      ClusterTopology: true
 
-# Default configurations for core providers
-# These will be installed automatically with the operator
-coreProvider:
-  name: cluster-api
-  version: v1.8.1
+core:
+  cluster-api:
+    createNamespace: false
+    namespace: capi-system
+    version: v1.10.0
 
-bootstrapProviders:
-  - name: kubeadm
-    version: v1.8.1
+bootstrap:
+  talos:
+    namespace: capi-system
+    version: v0.6.9
 
-controlPlaneProviders:
-  - name: kubeadm
-    version: v1.8.1
+controlPlane:
+  talos:
+    namespace: capi-system
+    version: v0.5.10
 
-infrastructureProviders:
-  # Add infrastructure providers as needed
-  # Example for AWS:
-  # - name: aws
-  #   version: v2.6.1
+infrastructure:
+  kubevirt:
+    namespace: capi-system
+    version: v0.1.10

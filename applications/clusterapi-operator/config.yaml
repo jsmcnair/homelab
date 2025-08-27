@@ -1,7 +1,7 @@
 generators:
   - name: clusterapi-operator
     type: argocd
-    namespace: capi-system
+    namespace: capi-operator
     sources:
       - repoURL: https://kubernetes-sigs.github.io/cluster-api-operator
         chart: cluster-api-operator
@@ -11,3 +11,4 @@ generators:
             - $values/applications/clusterapi-operator/values.yaml
       - repoURL: git@github.com:jsmcnair/homelab
         ref: values
+    enableExtraManifestSource: true
